@@ -10,6 +10,6 @@ database:
   sql-port: 3306
 
 redis:
-  server: "localhost:6379"
+  server: "myredis:6379"
 
 
