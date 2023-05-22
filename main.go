@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"net/url"
+	"os"
 
 	"math/rand"
 	"time"
@@ -12,7 +13,10 @@ import (
 
 	//1
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
+	// "github.com/gin-contrib/sessions/cookie"
+	//"github.com/gin-contrib/sessions/redis"
+	_ "github.com/gin-contrib/sessions/memstore"
+	"github.com/gin-contrib/sessions/redis"
 )
 
 type PageView struct {
@@ -46,8 +50,8 @@ func start(c *gin.Context) {
 	if user != nil {
 		currentUser = user.(string)
 	}
-
-	c.HTML(http.StatusOK, "home.html", &PageView{CurrentUser: currentUser, PageTitle: "test", Title: "Hej Golang", Text: "hejsan"})
+	computerName, _ := os.Hostname()
+	c.HTML(http.StatusOK, "home.html", &PageView{CurrentUser: currentUser, PageTitle: "test", Title: "Hej Golang", Text: computerName})
 }
 
 func secretfunc(c *gin.Context) {
@@ -102,10 +106,10 @@ func main() {
 	router := gin.Default()
 
 	//2
-	var secret = []byte("sdfjkl4237234jsdak")
-	//store, _ := redis.NewStore(10, "tcp", config.Redis.Server, "", secret)
-	store := cookie.NewStore([]byte(secret))
-	router.Use(sessions.Sessions("mysession", store))
+	var secret = []byte("secret")
+	store, _ := redis.NewStore(10, "tcp", config.Redis.Server, "", secret)
+	//store := memstore.NewStore([]byte(secret))
+	router.Use(sessions.Sessions("mysession2", store))
 
 	router.LoadHTMLGlob("templates/**")
 	router.GET("/", start)
