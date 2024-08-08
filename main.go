@@ -71,6 +71,13 @@ func logout(c *gin.Context) {
 
 }
 
+func healthCheck(c *gin.Context) {
+	// if redis == DEAD{
+	// 	c.JSON(http.StatusInternalServerError,gin.H{})
+	// }
+	c.JSON(http.StatusOK, gin.H{})
+}
+
 func login(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", &LoginView{PageTitle: "Login"})
 }
@@ -112,6 +119,7 @@ func main() {
 
 	router.LoadHTMLGlob("templates/**")
 	router.GET("/", start)
+	router.GET("/healthz", healthCheck)
 	router.GET("/login", login)
 	router.POST("/login", loginPost)
 	router.GET("/logout", logout)
@@ -120,6 +128,9 @@ func main() {
 	adminRoutes := router.Group("/admin")
 	adminRoutes.Use(AuthRequired)
 	adminRoutes.GET("/account", secretfunc)
+
+	// loop initierar en databas tabell och skapar 30000 rader...
+	// den tar 30 sekunder
 
 	router.Run(":8080")
 }
