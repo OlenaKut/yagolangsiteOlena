@@ -14,7 +14,6 @@ import (
 	//1
 	"github.com/gin-contrib/sessions"
 	// "github.com/gin-contrib/sessions/cookie"
-	//"github.com/gin-contrib/sessions/redis"
 	_ "github.com/gin-contrib/sessions/memstore"
 	"github.com/gin-contrib/sessions/redis"
 )
