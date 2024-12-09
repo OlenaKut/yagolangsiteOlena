@@ -9,12 +9,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"systementor.se/godemosite/data"
 
 	//1
 	"github.com/gin-contrib/sessions"
 	// "github.com/gin-contrib/sessions/cookie"
-	_ "github.com/gin-contrib/sessions/memstore"
+	//"github.com/gin-contrib/sessions/memstore"
 	"github.com/gin-contrib/sessions/redis"
 )
 
@@ -50,7 +49,11 @@ func start(c *gin.Context) {
 		currentUser = user.(string)
 	}
 	computerName, _ := os.Hostname()
-	c.HTML(http.StatusOK, "home.html", &PageView{CurrentUser: currentUser, PageTitle: "test", Title: "Hej Golang", Text: computerName})
+	c.HTML(http.StatusOK, "home.html",
+		&PageView{CurrentUser: currentUser,
+			PageTitle: "test",
+			Title:     "Hej Golang",
+			Text:      computerName})
 }
 
 func secretfunc(c *gin.Context) {
@@ -102,24 +105,25 @@ func main() {
 	theRandom = rand.New(rand.NewSource(time.Now().UnixNano()))
 	readConfig(&config)
 
-	data.InitDatabase(config.Database.File,
-		config.Database.Server,
-		config.Database.Database,
-		config.Database.Username,
-		config.Database.Password,
-		config.Database.Port)
+	// data.InitDatabase(config.Database.File,
+	// 	config.Database.Server,
+	// 	config.Database.Database,
+	// 	config.Database.Username,
+	// 	config.Database.Password,
+	// 	config.Database.Port)
 
 	router := gin.Default()
 
 	//2
 	var secret = []byte("secret")
+
 	store, _ := redis.NewStore(10, "tcp", config.Redis.Server, "", secret)
 	//store := memstore.NewStore([]byte(secret))
 	router.Use(sessions.Sessions("mysession2", store))
 
 	router.LoadHTMLGlob("templates/**")
 	router.GET("/", start)
-	router.GET("/healthz", healthCheck)
+	//router.GET("/healthz", healthCheck)
 	router.GET("/login", login)
 	router.POST("/login", loginPost)
 	router.GET("/logout", logout)
