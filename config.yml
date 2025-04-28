@@ -10,7 +10,7 @@ database:
   sql-port: 3306
 
 redis:
-  server: "host.docker.internal:6379"
+  server: "localhost:6379"
 
 
 
