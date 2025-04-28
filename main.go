@@ -5,6 +5,8 @@ import (
 	"net/url"
 	"os"
 
+	"log"
+
 	"math/rand"
 	"time"
 
@@ -52,7 +54,7 @@ func start(c *gin.Context) {
 	c.HTML(http.StatusOK, "home.html",
 		&PageView{CurrentUser: currentUser,
 			PageTitle: "test",
-			Title:     "Hej Golang",
+			Title:     "Hi Olena",
 			Text:      computerName})
 }
 
@@ -103,7 +105,10 @@ var config Config
 
 func main() {
 	theRandom = rand.New(rand.NewSource(time.Now().UnixNano()))
+	//var cfg Config
 	readConfig(&config)
+
+	log.Printf("Config loaded: %+v", config)
 
 	// data.InitDatabase(config.Database.File,
 	// 	config.Database.Server,
@@ -117,7 +122,10 @@ func main() {
 	//2
 	var secret = []byte("secret")
 
-	store, _ := redis.NewStore(10, "tcp", config.Redis.Server, "", secret)
+	store, err := redis.NewStore(10, "tcp", config.Redis.Server, "", secret)
+	if err != nil {
+		log.Fatalf("Failed to initialize Redis store: %v", err)
+	}
 	//store := memstore.NewStore([]byte(secret))
 	router.Use(sessions.Sessions("mysession2", store))
 
