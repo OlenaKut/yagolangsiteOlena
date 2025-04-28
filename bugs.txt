@@ -1,0 +1,9 @@
+olenakutasevych@Olenas-MacBook-Air yagolangsiteOlena % docker push git.systementor.se/olena/yagolangsiteolena
+Using default tag: latest
+The push refers to repository [git.systementor.se/olena/yagolangsiteolena]
+7a849bc60b90: Pushed 
+9f3bb2df742f: Pushed 
+5caf71570306: Pushed 
+924062f66d03: Pushed 
+failed commit on ref "index-sha256:e29a23a8cc8aa7e4534ce31f15dd4c3470074c8b3b818ff02cbfe2132cb0abd7": unexpected status from PUT request to https://git.systementor.se/v2/olena/yagolangsiteolena/manifests/latest: 404 Not Found
+
